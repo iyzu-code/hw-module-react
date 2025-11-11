@@ -13,11 +13,11 @@ import { createFileRoute } from '@tanstack/react-router'
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as OrderImport } from './routes/Order'
 
 // Create Virtual Routes
 
 const PastLazyImport = createFileRoute('/past')()
+const OrderLazyImport = createFileRoute('/order')()
 const IndexLazyImport = createFileRoute('/')()
 
 // Create/Update Routes
@@ -27,10 +27,10 @@ const PastLazyRoute = PastLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/past.lazy').then((d) => d.Route))
 
-const OrderRoute = OrderImport.update({
-  path: '/Order',
+const OrderLazyRoute = OrderLazyImport.update({
+  path: '/order',
   getParentRoute: () => rootRoute,
-} as any)
+} as any).lazy(() => import('./routes/order.lazy').then((d) => d.Route))
 
 const IndexLazyRoute = IndexLazyImport.update({
   path: '/',
@@ -48,11 +48,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexLazyImport
       parentRoute: typeof rootRoute
     }
-    '/Order': {
-      id: '/Order'
-      path: '/Order'
-      fullPath: '/Order'
-      preLoaderRoute: typeof OrderImport
+    '/order': {
+      id: '/order'
+      path: '/order'
+      fullPath: '/order'
+      preLoaderRoute: typeof OrderLazyImport
       parentRoute: typeof rootRoute
     }
     '/past': {
@@ -69,41 +69,41 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexLazyRoute
-  '/Order': typeof OrderRoute
+  '/order': typeof OrderLazyRoute
   '/past': typeof PastLazyRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexLazyRoute
-  '/Order': typeof OrderRoute
+  '/order': typeof OrderLazyRoute
   '/past': typeof PastLazyRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexLazyRoute
-  '/Order': typeof OrderRoute
+  '/order': typeof OrderLazyRoute
   '/past': typeof PastLazyRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/Order' | '/past'
+  fullPaths: '/' | '/order' | '/past'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/Order' | '/past'
-  id: '__root__' | '/' | '/Order' | '/past'
+  to: '/' | '/order' | '/past'
+  id: '__root__' | '/' | '/order' | '/past'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexLazyRoute: typeof IndexLazyRoute
-  OrderRoute: typeof OrderRoute
+  OrderLazyRoute: typeof OrderLazyRoute
   PastLazyRoute: typeof PastLazyRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexLazyRoute: IndexLazyRoute,
-  OrderRoute: OrderRoute,
+  OrderLazyRoute: OrderLazyRoute,
   PastLazyRoute: PastLazyRoute,
 }
 
@@ -120,15 +120,15 @@ export const routeTree = rootRoute
       "filePath": "__root.jsx",
       "children": [
         "/",
-        "/Order",
+        "/order",
         "/past"
       ]
     },
     "/": {
       "filePath": "index.lazy.jsx"
     },
-    "/Order": {
-      "filePath": "Order.jsx"
+    "/order": {
+      "filePath": "order.lazy.jsx"
     },
     "/past": {
       "filePath": "past.lazy.jsx"
