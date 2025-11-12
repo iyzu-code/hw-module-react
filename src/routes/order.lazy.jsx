@@ -5,6 +5,8 @@ import { CartContext } from "../context"
 
 import { createLazyFileRoute } from "@tanstack/react-router"
 
+const apiUrl = import.meta.env.VITE_API_URL;
+
 export const Route = createLazyFileRoute("/order")({
     component: Order,
 })
@@ -39,7 +41,7 @@ export default function Order() {
 
     async function fetchPizzaTypes() {
         await new Promise((resolve) => setTimeout(resolve, 3000))
-        const response = await fetch("/api/pizzas")
+        const response = await fetch(`${apiUrl}/api/pizzas`)
         const json = await response.json()
         // await console.log(json)
         setPizzaTypes(json)
@@ -48,7 +50,7 @@ export default function Order() {
 
     async function checkout() {
         setLoading(false)
-        await fetch("/api/order", {
+        await fetch(`${apiUrl}/api/order`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
